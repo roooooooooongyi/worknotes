@@ -46,7 +46,7 @@ date_5 2019-07-03
 ```
 
 ## 在IDE python开发环境中为hive添加时间
-将时间变量 **start_dt** 通过**"""+start_dt+"""**的形式嵌入hive代码中    
+将时间变量 **start_dt** 通过 ** """+start_dt+""" ** 的形式嵌入hive代码中    
 ```
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
