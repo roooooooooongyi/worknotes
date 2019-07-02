@@ -46,8 +46,8 @@ date_5 2019-07-03
 ```
 
 ## 2. 在IDE python开发环境中为hive添加时间
-将时间变量 **start_dt** 通过 ** '"""+start_dt+"""' ** 的形式嵌入hive代码中！否则无法正确插数据。       
-
+将时间变量 **start_dt** 通过 **'"""+start_dt+"""'** 的形式嵌入hive代码中！否则无法正确插数据，       
+表明等变量需要通过 **"""+table_name+"""** 形式插入，注意不要加''符号。
 ```
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -61,7 +61,7 @@ from HiveTask import HiveTask
 sys.path.append(os.getenv('HIVE_TASK'))  # add environment variable HIVE_TASK path to system
 ht = HiveTask()
 
-table_name = 'dev.dev_neirongdaogou_sx_sc_zzsy_orc'
+table_name = 'dev.dev_ide_test_wrj'
 part_dt = ht.oneday(1)
 start_dt = ht.oneday(-7)
 end_dt = ht.oneday(1)
@@ -92,7 +92,7 @@ set hive.groupby.mapaggr.checkinterval=100000;
 set hive.auto.convert.join = true;
 set hive.exec.dynamic.partition.mode = nonstrict;
 set hive.exec.dynamic.partition = true;
-insert overwrite table '"""+table_name+"""'
+insert overwrite table """+table_name+"""
     select
 	pv,
 	uv,
