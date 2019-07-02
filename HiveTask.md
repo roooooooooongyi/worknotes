@@ -46,8 +46,11 @@ date_5 2019-07-03
 ```
 
 ## 2. 在IDE python开发环境中为hive添加时间
-将时间变量 **start_dt** 通过 **'"""+start_dt+"""'** 的形式嵌入hive代码中！否则无法正确插数据，       
-表名等变量需要通过 **"""+table_name+"""** 形式插入，注意不要加''符号。
+将时间变量 **start_dt** 通过 **'"""+start_dt+"""'** 的形式嵌入hive代码中！否则无法正确插数据。    
+start_dt变量赋值有两种方式，今天是2019年7月2日，那么19年6月30日有如下两种表达方法：              
+start_dt = oneday(-1)          
+start_dt = '2019-06-30'          
+表名等变量需要通过 **"""+table_name+"""** 形式插入，注意不要加''符号。                
 ```
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -63,7 +66,8 @@ ht = HiveTask()
 
 table_name = 'dev.dev_ide_test_wrj'
 part_dt = ht.oneday(1)
-start_dt = ht.oneday(-7)
+start_dt = '2019-06-18'
+#start_dt = ht.oneday(-7)
 end_dt = ht.oneday(1)
 
 sql_query = """
