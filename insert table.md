@@ -1,6 +1,6 @@
 # hive中的insert
 
-insert into / insert overwrite 如果插入的数据重复则会进行更新或者覆盖   
+insert into / insert overwrite 如果插入的数据逻辑上出现重复，hive则会进行**更新或者覆盖**。   
 
 
 ```
