@@ -1,5 +1,5 @@
 # HiveTask   
-
+## 1. oneday(1)表示今天，oneday(0)表示昨天oneday(-1)表示前天。
 ```
 import sys
 import os
@@ -45,8 +45,9 @@ date_5 2019-07-03
 ========
 ```
 
-## 在IDE python开发环境中为hive添加时间
-将时间变量 **start_dt** 通过 ** """+start_dt+""" ** 的形式嵌入hive代码中    
+## 2. 在IDE python开发环境中为hive添加时间
+将时间变量 **start_dt** 通过 ** '"""+start_dt+"""' ** 的形式嵌入hive代码中！否则无法正确插数据。       
+
 ```
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -60,35 +61,54 @@ from HiveTask import HiveTask
 sys.path.append(os.getenv('HIVE_TASK'))  # add environment variable HIVE_TASK path to system
 ht = HiveTask()
 
-table_name = 'dev.dev_table'
-part_dt = ht.oneday(0)
+table_name = 'dev.dev_neirongdaogou_sx_sc_zzsy_orc'
+part_dt = ht.oneday(1)
 start_dt = ht.oneday(-7)
-end_dt = ht.oneday(0)
+end_dt = ht.oneday(1)
 
 sql_query = """
+set hive.optimize.cp=true;
+set hive.optimize.pruner=true;
+set hive.limit.optimeize.enable=true;
+set hive.limit.row.max.size=1000000;
+set hive.limit.optimize.limit.file=10;
+set hive.exec.parallel=true;
+set hive.exec.parallel.thread.number=16;
+set hive.merge.mapfiles = true;
+set hive.merge.mapredfiles = true;
+set hive.merge.size.per.task=256000000;
+set hive.merge.smallfiles.avgsize = 256000000;
+set mapred.max.split.size=256000000;
+set mapred.min.split.size.per.node=256000000;
+set mapred.min.split.size.per.rack=256000000;
+set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;
+set hive.join.emit.interval = 2000;
+set hive.mapjoin.size.key = 20000;
+set hive.mapjoin.cache.numrows = 20000;
+set hive.exec.reducers.bytes.per.reducer=2000000000;
+set hive.exec.reducers.max=999;
+set hive.map.aggr=true;
+set hive.groupby.mapaggr.checkinterval=100000;
+set hive.auto.convert.join = true;
+set hive.exec.dynamic.partition.mode = nonstrict;
+set hive.exec.dynamic.partition = true;
+insert overwrite table '"""+table_name+"""'
     select
-	groupid,
-	type,
-	class,
-	page,
 	pv,
 	uv,
 	dt,
 	'daogou_sx'type1,
 	'29' type2
 from
-	"""+table_name+"""  
+	dev.dev_neirongdaogou_sx_sc_zzsy_orc
 where
-    dt >="""+start_dt+"""
-    and dt <="""+end_dt+"""
+    dt >='"""+start_dt+"""'
+    and dt <='"""+end_dt+"""'
 group by
-	groupid,
-	type,
-	class,
-	page,
 	pv,
 	uv,
 	dt
 """
-ht.exec_sql(schema_name = 'app',  sql = sql_query)
+ht.exec_sql(schema_name = 'dev',  sql = sql_query)
+
 ```
